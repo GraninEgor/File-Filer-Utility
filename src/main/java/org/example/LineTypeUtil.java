@@ -14,7 +14,7 @@ public class LineTypeUtil {
 
     public static boolean isInt(String s) {
         try {
-            Integer.parseInt(s);
+            Long.parseLong(s);
             return true;
         } catch (NumberFormatException e) {
             return false;
@@ -23,7 +23,7 @@ public class LineTypeUtil {
 
     public static boolean isFloat(String s) {
         try {
-            Float.parseFloat(s);
+            Double.parseDouble(s);
             return true;
         } catch (NumberFormatException e) {
             return false;

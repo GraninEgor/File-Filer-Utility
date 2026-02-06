@@ -1,18 +1,33 @@
 package org.example;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class OptionsParser {
+    public static Options getOptions(String[] args){
+        String path = "";
+        String prefix = "";
+        boolean inCurrentFilesMode = false;
+        boolean fullStatisticsMode = false;
 
-    public static List<String> getOptions(String[] args){
-        List<String> options = new ArrayList<>();
+        for (int i = 0; i < args.length; i++) {
+            String arg = args[i];
 
-        for (String arg: args){
-            if (arg.startsWith("-")){
-                options.add(arg);
+            if (!arg.startsWith("-")) {
+                continue;
+            }
+
+            switch (arg) {
+                case "-o" -> {
+                    path = args[++i];
+                }
+
+                case "-p" -> {
+                    prefix = args[++i];
+                }
+
+                case "-a" -> inCurrentFilesMode = true;
+
+                case "-f" -> fullStatisticsMode = true;
             }
         }
-        return options;
+        return new Options(path,prefix,inCurrentFilesMode,fullStatisticsMode);
     }
 }

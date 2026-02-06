@@ -7,7 +7,7 @@ import java.util.List;
 
 public class FileProcessor {
 
-    public LineStorage execute(List<String> files, List<String> options) {
+    public LineStorage execute(List<String> files) {
         LineStorage lineStorage = new LineStorage();
         for (String fileName: files){
             try (var lines = Files.lines(Path.of(fileName))) {
