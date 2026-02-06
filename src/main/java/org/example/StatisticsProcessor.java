@@ -44,7 +44,7 @@ public class StatisticsProcessor {
         }
 
         double min = Double.MAX_VALUE;
-        double max = -Double.MAX_VALUE;
+        double max = Double.MIN_VALUE;
         double sum = 0;
 
         for (String s : floats) {

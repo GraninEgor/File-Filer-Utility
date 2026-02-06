@@ -13,7 +13,7 @@ public class FileFilerUtilityApplication {
         FileOutputProcessor fileOutputProcessor = new FileOutputProcessor(options);
         fileOutputProcessor.save(storage);
 
-        if(options.isFullStatisticsMode()){
+        if(options.fullStatisticsMode()){
             StatisticsProcessor statisticsProcessor = new StatisticsProcessor();
             statisticsProcessor.process(storage);
         }

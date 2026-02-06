@@ -1,7 +1,7 @@
 package org.example;
 
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
+import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
@@ -16,9 +16,22 @@ public class FileOutputProcessor {
     }
 
     public void save(LineStorage lineStorage) {
-        Path dir = Path.of("out");
+        Path baseDir = Path.of("out");
+
+        String relativePath = options.path();
+
+        if (relativePath.startsWith("/")) {
+            relativePath = relativePath.substring(1);
+        }
+
+        relativePath = relativePath.replace("/", FileSystems.getDefault().getSeparator());
+
+        Path targetDir = options.path().isEmpty()
+                ? baseDir
+                : baseDir.resolve(relativePath);
+
         try {
-            Files.createDirectories(dir);
+            Files.createDirectories(targetDir);
         } catch (IOException e) {
             System.out.println("Error creating output directory");
             return;
@@ -26,7 +39,7 @@ public class FileOutputProcessor {
 
         try {
             if (!lineStorage.getIntegers().isEmpty()){
-                writeFile(dir.resolve(buildPath("integers.txt")), lineStorage.getIntegers());
+                writeFile(targetDir.resolve(buildPath("integers.txt")), lineStorage.getIntegers());
             }
         } catch (IOException e) {
             System.out.println("Error saving integers.txt");
@@ -34,7 +47,7 @@ public class FileOutputProcessor {
 
         try {
             if (!lineStorage.getFloats().isEmpty()){
-                writeFile(dir.resolve(buildPath("floats.txt")), lineStorage.getFloats());
+                writeFile(targetDir.resolve(buildPath("floats.txt")), lineStorage.getFloats());
             }
         } catch (IOException e) {
             System.out.println("Error saving floats.txt");
@@ -42,20 +55,17 @@ public class FileOutputProcessor {
 
         try {
             if (!lineStorage.getStrings().isEmpty()){
-                writeFile(dir.resolve(buildPath("strings.txt")), lineStorage.getStrings());
+                writeFile(targetDir.resolve(buildPath("strings.txt")), lineStorage.getStrings());
             }
         } catch (IOException e) {
-            System.out.println("Error saving strings.txt: " + e.getMessage());
+            System.out.println("Error saving strings.txt");
         }
 
         printShortStatistics(lineStorage);
     }
 
     private String buildPath(String name){
-        if (options.getPath().isEmpty()){
-            return options.getPrefix() + name;
-        }
-        return options.getPath() + "/" + options.getPrefix() + name;
+        return options.prefix() + name;
     }
 
     private void printShortStatistics(LineStorage lineStorage){
@@ -66,7 +76,7 @@ public class FileOutputProcessor {
     }
 
     private void writeFile(Path path, List<String> lines) throws IOException {
-        StandardOpenOption mode = options.isInCurrentFilesMode()
+        StandardOpenOption mode = options.inCurrentFilesMode()
                 ? StandardOpenOption.APPEND
                 : StandardOpenOption.TRUNCATE_EXISTING;
 
