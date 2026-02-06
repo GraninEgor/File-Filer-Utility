@@ -15,17 +15,11 @@ public class OptionsParser {
             }
 
             switch (arg) {
-                case "-o" -> {
-                    path = args[++i];
-                }
-
-                case "-p" -> {
-                    prefix = args[++i];
-                }
-
+                case "-o" -> path = args[++i];
+                case "-p" -> prefix = args[++i];
                 case "-a" -> inCurrentFilesMode = true;
-
                 case "-f" -> fullStatisticsMode = true;
+                default -> System.out.println("Был введёна несуществующая опция: " + arg);
             }
         }
         return new Options(path,prefix,inCurrentFilesMode,fullStatisticsMode);

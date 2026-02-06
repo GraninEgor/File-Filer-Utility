@@ -5,12 +5,18 @@ import java.util.List;
 public class StatisticsProcessor {
 
     public void process(LineStorage storage) {
+        System.out.println("Полная статистика:");
+
         processIntegers(storage.getIntegers());
         processFloats(storage.getFloats());
         processStrings(storage.getStrings());
     }
 
     private void processIntegers(List<String> integers) {
+        if (integers.isEmpty()){
+            return;
+        }
+
         long min = Long.MAX_VALUE;
         long max = Long.MIN_VALUE;
         long sum = 0;
@@ -24,7 +30,7 @@ public class StatisticsProcessor {
 
         double avg = sum / (double) integers.size();
 
-        System.out.println("Integers Statistics:");
+        System.out.println("Статистика целых чисел:");
         System.out.println("Min: " + min);
         System.out.println("Max: " + max);
         System.out.println("Sum: " + sum);
@@ -33,6 +39,10 @@ public class StatisticsProcessor {
     }
 
     private void processFloats(List<String> floats) {
+        if (floats.isEmpty()){
+            return;
+        }
+
         double min = Double.MAX_VALUE;
         double max = -Double.MAX_VALUE;
         double sum = 0;
@@ -46,7 +56,7 @@ public class StatisticsProcessor {
 
         double avg = sum / floats.size();
 
-        System.out.println("Floats Statistics:");
+        System.out.println("Статистика вещественных чисел:");
         System.out.println("Count: " + floats.size());
         System.out.println("Min: " + min);
         System.out.println("Max: " + max);
@@ -56,6 +66,10 @@ public class StatisticsProcessor {
     }
 
     private void processStrings(List<String> strings) {
+        if (strings.isEmpty()){
+            return;
+        }
+
         int minLength = Integer.MAX_VALUE;
         int maxLength = Integer.MIN_VALUE;
         String minString = null;
@@ -73,7 +87,7 @@ public class StatisticsProcessor {
             }
         }
 
-        System.out.println("Strings Statistics:");
+        System.out.println("Статистика строк:");
         System.out.println("Min Length: " + minLength + ", String: \"" + minString + "\"");
         System.out.println("Max Length: " + maxLength + ", String: \"" + maxString + "\"");
     }

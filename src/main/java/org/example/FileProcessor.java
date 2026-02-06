@@ -20,7 +20,7 @@ public class FileProcessor {
                     }
                 });
             } catch (IOException e) {
-                throw new RuntimeException();
+                System.out.println("Error reading file " + fileName);
             }
         }
         return lineStorage;

@@ -16,22 +16,43 @@ public class FileOutputProcessor {
     }
 
     public void save(LineStorage lineStorage) {
+        Path dir = Path.of("out");
         try {
-            Path dir = Path.of("out");
             Files.createDirectories(dir);
-
-            writeFile(dir.resolve(buildPath("integers.txt")), lineStorage.getIntegers());
-            writeFile(dir.resolve(buildPath("floats.txt")), lineStorage.getFloats());
-            writeFile(dir.resolve(buildPath("strings.txt")), lineStorage.getStrings());
-
-            printShortStatistics(lineStorage);
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            System.out.println("Error creating output directory");
+            return;
         }
+
+        try {
+            if (!lineStorage.getIntegers().isEmpty()){
+                writeFile(dir.resolve(buildPath("integers.txt")), lineStorage.getIntegers());
+            }
+        } catch (IOException e) {
+            System.out.println("Error saving integers.txt");
+        }
+
+        try {
+            if (!lineStorage.getFloats().isEmpty()){
+                writeFile(dir.resolve(buildPath("floats.txt")), lineStorage.getFloats());
+            }
+        } catch (IOException e) {
+            System.out.println("Error saving floats.txt");
+        }
+
+        try {
+            if (!lineStorage.getStrings().isEmpty()){
+                writeFile(dir.resolve(buildPath("strings.txt")), lineStorage.getStrings());
+            }
+        } catch (IOException e) {
+            System.out.println("Error saving strings.txt: " + e.getMessage());
+        }
+
+        printShortStatistics(lineStorage);
     }
 
     private String buildPath(String name){
-        if (options.getPath() == ""){
+        if (options.getPath().isEmpty()){
             return options.getPrefix() + name;
         }
         return options.getPath() + "/" + options.getPrefix() + name;
@@ -39,19 +60,16 @@ public class FileOutputProcessor {
 
     private void printShortStatistics(LineStorage lineStorage){
         System.out.println("Целых чисел: " + lineStorage.getIntegers().size());
-        System.out.println("Вещественныx чисел: " + lineStorage.getFloats().size());
+        System.out.println("Вещественных чисел: " + lineStorage.getFloats().size());
         System.out.println("Строк: " + lineStorage.getStrings().size());
+        System.out.println();
     }
 
-    private void writeFile(Path path, List<String> lines) {
+    private void writeFile(Path path, List<String> lines) throws IOException {
         StandardOpenOption mode = options.isInCurrentFilesMode()
                 ? StandardOpenOption.APPEND
                 : StandardOpenOption.TRUNCATE_EXISTING;
 
-        try {
-            Files.write(path, lines, StandardOpenOption.CREATE, mode);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        Files.write(path, lines, StandardOpenOption.CREATE, mode);
     }
 }
